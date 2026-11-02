@@ -1,5 +1,3 @@
-
-
 name: Build Truck Driver Pro APK
 
 on:
@@ -10,7 +8,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
