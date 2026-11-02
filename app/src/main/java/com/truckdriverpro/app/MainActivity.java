@@ -46,7 +46,7 @@ public class MainActivity extends Activity {
             public boolean onShowFileChooser(WebView view, ValueCallback<Uri[]> callback, FileChooserParams params) {
                 if (fileCallback != null) fileCallback.onReceiveValue(null);
                 fileCallback = callback;
-                Intent gallery = new Intent(Intent.ACTION_GET_CONTENT);
+                Intent gallery = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 gallery.addCategory(Intent.CATEGORY_OPENABLE);
                 gallery.setType("image/*");
                 Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -83,7 +83,9 @@ public class MainActivity extends Activity {
                         File photo = new File(getCacheDir(), "driver-photo-" + System.currentTimeMillis() + ".jpg");
                         try (FileOutputStream out = new FileOutputStream(photo)) {
                             ((Bitmap) extra).compress(Bitmap.CompressFormat.JPEG, 90, out);
-                            results = new Uri[]{Uri.fromFile(photo)};
+                            String saved = MediaStore.Images.Media.insertImage(getContentResolver(), photo.getAbsolutePath(), "TruckDriverPhoto", null);
+                            if (saved != null) results = new Uri[]{Uri.parse(saved)};
+                            photo.delete();
                         } catch (Exception ignored) { }
                     }
                 }
